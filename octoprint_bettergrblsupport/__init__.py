@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+# This has been edited to ensure the efficient control of GRBL 1.1 controllers and prevent anomalous crashing of the system
 
 from __future__ import absolute_import
 from octoprint.events import Events
@@ -69,7 +70,7 @@ class BetterGrblSupportPlugin(octoprint.plugin.SettingsPlugin,
         self.ignoreErrors = False
         self.doSmoothie = False
 
-        self.customControlsJson = r'[{"layout": "horizontal", "children": [{"commands": ["$10=0", "G28.1", "G92 X0 Y0 Z0"], "name": "Set Origin", "confirm": null}, {"command": "M999", "name": "Reset", "confirm": null}, {"commands": ["G1 F4000 S0", "M5", "$SLP"], "name": "Sleep", "confirm": null}, {"command": "$X", "name": "Unlock", "confirm": null}, {"commands": ["$32=0", "M4 S1"], "name": "Weak Laser", "confirm": null}, {"commands": ["$32=1", "M5"], "name": "Laser Off", "confirm": null}], "name": "Laser Commands"}, {"layout": "vertical", "type": "section", "children": [{"regex": "<([^,]+)[,|][WM]Pos:([+\\-\\d.]+,[+\\-\\d.]+,[+\\-\\d.]+)", "name": "State", "default": "", "template": "State: {0} - Position: {1}", "type": "feedback"}, {"regex": "F([\\d.]+) S([\\d.]+)", "name": "GCode State", "default": "", "template": "Speed: {0}  Power: {1}", "type": "feedback"}], "name": "Realtime State"}]'
+        self.customControlsJson = r'[{"layout": "horizontal", "children": [{"commands": ["$10=0", "G28.1", "G92 X0 Y0 Z0"], "name": "Set Origin", "confirm": null}, {"command": "M999", "name": "Reset", "confirm": null}, {"commands": ["G1 F4000 S0", "M5", "$SLP"], "name": "Sleep", "confirm": null}, {"command": "$X", "name": "Unlock", "confirm": null}, {"commands": ["M4 S1"], "name": "Weak Laser", "confirm": null}, {"commands": ["M5"], "name": "Laser Off", "confirm": null}], "name": "Laser Commands"}, {"layout": "vertical", "type": "section", "children": [{"regex": "<([^,]+)[,|][WM]Pos:([+\\-\\d.]+,[+\\-\\d.]+,[+\\-\\d.]+)", "name": "State", "default": "", "template": "State: {0} - Position: {1}", "type": "feedback"}, {"regex": "F([\\d.]+) S([\\d.]+)", "name": "GCode State", "default": "", "template": "Speed: {0}  Power: {1}", "type": "feedback"}], "name": "Realtime State"}]'
 
     # #~~ SettingsPlugin mixin
     def get_settings_defaults(self):
@@ -704,7 +705,7 @@ class BetterGrblSupportPlugin(octoprint.plugin.SettingsPlugin,
 
     def send_frame_init_gcode(self):
         self._printer.commands("G4 P0")
-        self._printer.commands("$32=0")
+        # self._printer.commands("$32=0")
         self._printer.commands("G00 G17 G40 G21 G54")
         self._printer.commands("G91")
         # self._printer.commands("$32=0")
@@ -720,7 +721,7 @@ class BetterGrblSupportPlugin(octoprint.plugin.SettingsPlugin,
         self._printer.commands("M5")
         self._printer.commands("M2")
         self._printer.commands("G4 P0")
-        self._printer.commands("$32=1")
+        # self._printer.commands("$32=1")
 
     def send_bounding_box_upper_left(self, y, x):
         self._printer.commands("G0 X{:f} F2000 S{}".format(x, self.weakLaserValue))
@@ -967,14 +968,14 @@ class BetterGrblSupportPlugin(octoprint.plugin.SettingsPlugin,
         powerLevel = self.grblPowerLevel
 
         if powerLevel == 0:
-            self._printer.commands("$32=0")
+            #self._printer.commands("$32=0")
             self._printer.commands("M4 F1000 S{}".format(self.weakLaserValue))
             res = "Laser Off"
         else:
             # self._printer.commands("M9")
             self._printer.commands("G1S0")
             self._printer.commands("M4 F0 S0")
-            self._printer.commands("$32=1")
+            #self._printer.commands("$32=1")
             self._printer.commands("M5")
             self._printer.commands("M2")
             res = "Weak Laser"
