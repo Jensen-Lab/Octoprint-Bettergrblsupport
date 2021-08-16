@@ -1,8 +1,10 @@
-# Better Grbl Support Plugin for Octoprint
+# Better Grbl Support Plugin for Octoprint - Edited for Neje Laser Cutter
 
 ![grbl](https://raw.githubusercontent.com/gnea/gnea-Media/master/Grbl%20Logo/Grbl%20Logo%20250px.png)
 
 This plugin was inspired by mic159's Grbl Support plugin (https://plugins.octoprint.org/plugins/octoprint-grbl-plugin/).  His plugin gets you 90% of the way there for adding Grbl support to Octoprint but had a couple limitations and lacked some bells and whistles from a UI and configuration perspective.
+
+Matt here: The commands have been edited for compatability with GRBL 1.1 so that we can use it for Neje Laser Cutters out of the box
 
 **Better Grbl Support** utilizes mic159's gcode receiver parser (with significant modifications) and does much, much more:
 
